@@ -66,6 +66,10 @@
         <apache.rat.version>0.15</apache.rat.version>
     </properties>
 
+    <modules>
+      <module>core</module>
+    </modules>
+
     <dependencies>
         <!--Test-->
 
