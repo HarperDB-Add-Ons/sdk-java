@@ -66,6 +66,7 @@ public enum OperationType implements Supplier<String> {
      * @return The string representation of the operation.
      */
     @Override
+    @JsonValue
     public String get() {
         return operation;
     }

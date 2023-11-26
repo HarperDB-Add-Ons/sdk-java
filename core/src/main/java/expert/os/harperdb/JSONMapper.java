@@ -1,10 +1,11 @@
 package expert.os.harperdb;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public enum JSONMapper {
+enum JSONMapper {
     INSTANCE;
 private final ObjectMapper mapper;
     {
@@ -14,7 +15,12 @@ private final ObjectMapper mapper;
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
-    public ObjectMapper getMapper() {
-        return mapper;
+    byte[] writeValueAsBytes(Object value) {
+        try {
+            return mapper.writeValueAsBytes(value);
+        } catch (JsonProcessingException exception) {
+            throw new HarperDBException("There is an issue to write to json value", exception);
+        }
+
     }
 }
