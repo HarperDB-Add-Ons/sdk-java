@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JSONMapperTest {
-    private JSONMapper mapper = JSONMapper.INSTANCE;
+    private final JSONMapper mapper = JSONMapper.INSTANCE;
+
     @Test
     public void shouldWriteValueAsBytes() {
         byte[] bytes = mapper.writeValueAsBytes(new CreateSchema("test"));
