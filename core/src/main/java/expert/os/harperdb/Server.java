@@ -3,7 +3,7 @@ package expert.os.harperdb;
 import java.net.URI;
 import java.net.http.HttpClient;
 
-public final class Server implements AutoCloseable {
+public final class Server  {
 
     private final URI host;
     private final Auth auth;
@@ -20,9 +20,4 @@ public final class Server implements AutoCloseable {
         return new Server(host, auth);
     }
 
-    @Override
-    public void close() throws Exception {
-        this.client.close();
-
-    }
 }
