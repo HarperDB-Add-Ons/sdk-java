@@ -26,12 +26,6 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>1.19.3</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
