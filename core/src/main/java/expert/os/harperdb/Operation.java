@@ -1,10 +1,13 @@
 package expert.os.harperdb;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Abstract class representing a generic operation in HarperDB.
  */
 abstract class Operation {
 
+    @JsonProperty
     private final OperationType operation;
 
     /**
@@ -21,6 +24,7 @@ abstract class Operation {
      *
      * @return The operation type.
      */
+
     public OperationType operation() {
         return operation;
     }
