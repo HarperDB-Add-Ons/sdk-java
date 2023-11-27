@@ -23,7 +23,7 @@ public final class ServerBuilder {
     public Server withCredentials(String username, String password){
         Objects.requireNonNull(username, "username must not be null");
         Objects.requireNonNull(password, "password must not be null");
-        Auth auth = new Auth(username, password);
+        Auth auth = Auth.of(username, password);
         return Server.of(host, auth);
     }
 

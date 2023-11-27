@@ -1,4 +1,14 @@
 package expert.os.harperdb;
 
-record Auth(String username, String password) {
+import java.util.Base64;
+
+record Auth(String username, String password, String header) {
+
+
+    static Auth of(String username, String password) {
+        String header = "Basic " + Base64.getEncoder()
+                .encodeToString((username + ":" + password).getBytes());
+        return new Auth(username, password, header);
+    }
+
 }

@@ -3,6 +3,9 @@ package expert.os.harperdb;
 import java.net.URI;
 import java.net.http.HttpClient;
 
+/**
+ * Represents a HarperDB server.
+ */
 public final class Server  {
 
     private final URI host;
