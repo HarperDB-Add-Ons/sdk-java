@@ -14,10 +14,11 @@ public final class ServerBuilder {
 
     /**
      * Defines the credentials to be used for the HarperDB instance.
-     * @param username the username to be used for the HarperDB instance
-     * @param password the password to be used for the HarperDB instance
-     * @return an initial configuration of the builder
-     * throws NullPointerException if username or password is null
+     *
+     * @param username the username to be used for the HarperDB instance.
+     * @param password the password to be used for the HarperDB instance.
+     * @return an initial configuration of the builder.
+     * @throws NullPointerException if username or password is null.
      */
     public Server withCredentials(String username, String password){
         Objects.requireNonNull(username, "username must not be null");
@@ -28,8 +29,10 @@ public final class ServerBuilder {
 
     /**
      * Defines the host of the HarperDB instance.
-     * @param uri the host of the HarperDB instance. E.g.:<a href="http://localhost:9925">http://localhost:9925</a>
-     * @return an initial configuration of the builder
+     *
+     * @param uri the host of the HarperDB instance. E.g.: <a href="http://localhost:9925">http://localhost:9925</a>.
+     * @return an initial configuration of the builder.
+     * @throws NullPointerException if uri is null.
      */
     public static ServerBuilder of(String uri){
         Objects.requireNonNull(uri, "uri must not be null");
