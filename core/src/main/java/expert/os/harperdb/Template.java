@@ -13,22 +13,22 @@ public final class Template {
         this.server = server;
     }
 
-    public <T> void insert(T entity) {
+    public <T> boolean insert(T entity) {
         Objects.requireNonNull(entity, "entity is required");
         var insert = new Insert(database, entity.getClass().getSimpleName(), Collections.singletonList(entity));
-        server.insert(insert);
+        return server.insert(insert);
     }
 
-    public <T> void insert(Iterable<T> entities) {
+    public <T> boolean insert(Iterable<T> entities) {
         Objects.requireNonNull(entities, "entities is required");
         List<T> beans = StreamSupport.stream(entities.spliterator(), false)
                 .toList();
         if(beans.isEmpty()){
-           return;
+           return false;
         }
         String name = beans.get(0).getClass().getSimpleName();
         var insert = new Insert(database, name, Collections.singletonList(beans));
-        server.insert(insert);
+        return server.insert(insert);
     }
 
 }
