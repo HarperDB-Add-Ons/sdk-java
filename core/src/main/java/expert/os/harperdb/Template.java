@@ -2,6 +2,7 @@ package expert.os.harperdb;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
@@ -15,9 +16,11 @@ public final class Template {
 
     public <T> boolean insert(T entity) {
         Objects.requireNonNull(entity, "entity is required");
-        var insert = new Insert(database, entity.getClass().getSimpleName(), Collections.singletonList(entity));
+        var insert = new Insert(database, table(entity), Collections.singletonList(entity));
         return server.insert(insert);
     }
+
+
 
     public <T> boolean insert(Iterable<T> entities) {
         Objects.requireNonNull(entities, "entities is required");
@@ -26,9 +29,13 @@ public final class Template {
         if(beans.isEmpty()){
            return false;
         }
-        String name = beans.get(0).getClass().getSimpleName();
+        String name = table(beans.get(0));
         var insert = new Insert(database, name, Collections.singletonList(beans));
         return server.insert(insert);
+    }
+
+    private <T> String table(T entity) {
+        return entity.getClass().getSimpleName().toLowerCase(Locale.US);
     }
 
 }

@@ -85,10 +85,10 @@ public final class Server  {
                 .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
                 .build();
         try {
-            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
             return HttpStatus.OK.isEquals(response);
         } catch (IOException| InterruptedException e) {
-            throw new HarperDBException("There is an issue to execute the operation: " + operation, e);
+            throw new HarperDBException("There is an issue to execute the operation: " + operation + "message: ", e);
         }
     }
 
