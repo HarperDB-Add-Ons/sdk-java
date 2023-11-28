@@ -64,6 +64,15 @@ final class CreateTable extends Operation {
         return id;
     }
 
+    /**
+     * Gets the database associated with this operation.
+     *
+     * @return The database.
+     */
+    public String database() {
+        return database;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -74,12 +83,12 @@ final class CreateTable extends Operation {
         }
         CreateTable that = (CreateTable) object;
         return Objects.equals(schema, that.schema) && Objects.equals(table, that.table)
-                && Objects.equals(id, that.id);
+                && Objects.equals(id, that.id) && Objects.equals(database, that.database);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(schema, table, id);
+        return Objects.hash(schema, table, id, database);
     }
 
     @Override
@@ -88,6 +97,7 @@ final class CreateTable extends Operation {
                 "schema='" + schema + '\'' +
                 ", table='" + table + '\'' +
                 ", id='" + id + '\'' +
+                ", database='" + database + '\'' +
                 '}';
     }
 }
