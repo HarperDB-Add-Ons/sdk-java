@@ -62,6 +62,18 @@ public final class Server  {
         return new CreateTableBuilder(schema, this);
     }
 
+    boolean createTable(CreateTable operation) {
+        HttpRequest request = createRequest()
+                .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
+                .build();
+        try {
+            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            return HttpStatus.OK.isEquals(response);
+        } catch (IOException| InterruptedException e) {
+            throw new HarperDBException("There is an issue to create the table: " + operation, e);
+        }
+    }
+
 
     HttpRequest.Builder createRequest() {
         return HttpRequest.newBuilder()
@@ -70,5 +82,6 @@ public final class Server  {
                 .header("Authorization", auth.header());
 
     }
+
 
 }

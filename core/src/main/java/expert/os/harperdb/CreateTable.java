@@ -2,6 +2,8 @@ package expert.os.harperdb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 /**
  * Represents the "create table" operation in HarperDB.
  */
@@ -55,5 +57,32 @@ final class CreateTable extends Operation {
      */
     public String id() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        CreateTable that = (CreateTable) object;
+        return Objects.equals(schema, that.schema) && Objects.equals(table, that.table)
+                && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(schema, table, id);
+    }
+
+    @Override
+    public String toString() {
+        return "CreateTable{" +
+                "schema='" + schema + '\'' +
+                ", table='" + table + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
 }

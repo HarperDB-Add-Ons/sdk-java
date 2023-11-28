@@ -35,10 +35,7 @@ public final class CreateTableBuilder {
         }
         public boolean id(String id) {
             Objects.requireNonNull(id, "id is required");
-            HttpRequest request = this.server.createRequest()
-                    .POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema(schema))))
-                    .build();
-            return false;
+            return this.server.createTable(new CreateTable(schema, table, id));
         }
     }
 
