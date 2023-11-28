@@ -76,11 +76,7 @@ public final class Server  {
         return execute(operation);
     }
 
-    boolean insert(Insert insert) {
-      return execute(insert);
-    }
-
-    private boolean execute(Operation operation){
+    boolean execute(Operation operation){
         HttpRequest request = createRequest()
                 .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
                 .build();
