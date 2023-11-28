@@ -18,18 +18,23 @@ final class CreateTable extends Operation {
     @JsonProperty("hash_attribute")
     private final String id;
 
+    @JsonProperty("database")
+    private final String database;
+
     /**
      * Constructs a new CreateTable operation with the specified schema, table, and ID.
      *
      * @param schema The name of the schema for the new table.
      * @param table  The name of the table to be created.
+     * @param database The name of the database to be created.
      * @param id     The hash attribute for the new table.
      */
-    CreateTable(String schema, String table, String id) {
+    CreateTable(String schema, String table, String id, String database) {
         super(OperationType.CREATE_TABLE);
         this.schema = schema;
         this.table = table;
         this.id = id;
+        this.database = database;
     }
 
     /**
