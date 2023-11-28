@@ -32,4 +32,10 @@ public enum Container {
         return PASSWORD;
     }
 
+    Server getServer() {
+        return ServerBuilder.of(host())
+                .withCredentials(user(), password());
+    }
+
+
 }

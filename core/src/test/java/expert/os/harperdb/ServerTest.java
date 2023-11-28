@@ -10,14 +10,14 @@ class ServerTest {
 
     @Test
     void shouldGetHost() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         Assertions.assertNotNull(server);
     }
 
     @Test
     void shouldCreateSchema() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         boolean schema = server.createSchema("test");
         Assertions.assertTrue(schema);
@@ -25,7 +25,7 @@ class ServerTest {
 
     @Test
     void shouldNotCreateSchemaDuplicated() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         boolean schema = server.createSchema("duplicated");
         Assertions.assertTrue(schema);
@@ -34,7 +34,7 @@ class ServerTest {
 
     @Test
     void shouldReturnNPEWhenSchemaIsNull() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         Assertions.assertThrows(NullPointerException.class, () -> server.createTable(null));
         Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table(null));
@@ -43,14 +43,14 @@ class ServerTest {
 
     @Test
     void shouldReturnNPEWhenCreateDatabaseIsNull() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         Assertions.assertThrows(NullPointerException.class, () -> server.createDatabase(null));
     }
 
     @Test
     void shouldCreateDatabase() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(server.createDatabase("database")).isTrue();
@@ -60,7 +60,7 @@ class ServerTest {
 
     @Test
     void shouldCreateTable() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         server.createSchema("test");
         SoftAssertions.assertSoftly(softly -> {
@@ -73,23 +73,19 @@ class ServerTest {
 
     @Test
     void shouldReturnNPEWhenTemplateIsNull() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         Assertions.assertThrows(NullPointerException.class, () -> server.template(null));
     }
 
     @Test
     void shouldCreateTemplate() {
-        Server server = getServer();
+        Server server = container.getServer();
 
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(server.template("test")).isNotNull();
         });
     }
 
-    private Server getServer() {
-        return ServerBuilder.of(container.host())
-                .withCredentials(container.user(), container.password());
-    }
 
 }
