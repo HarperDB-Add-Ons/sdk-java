@@ -18,6 +18,10 @@ public enum OperationType implements Supplier<String> {
      * Operation to create a table in HarperDB.
      */
     CREATE_TABLE("create_table"),
+    /**
+     * Operation to create a database in HarperDB.
+     */
+    CREATE_DATABASE("create_database"),
 
     /**
      * Operation to insert data into a HarperDB table.
