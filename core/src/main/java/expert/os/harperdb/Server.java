@@ -37,7 +37,7 @@ public final class Server  {
      * @return true if the schema was created, false otherwise
      * @throws NullPointerException if schema is null
      */
-    public boolean schema(String schema) {
+    public boolean createSchema(String schema) {
         Objects.requireNonNull(schema, "schema is required");
         HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema(schema))))
                 .build();
@@ -48,6 +48,28 @@ public final class Server  {
         } catch (IOException| InterruptedException e) {
             throw new HarperDBException("There is an issue to create the schema: " + schema, e);
         }
+    }
+
+    /**
+     * Creates a new database in HarperDB with the specified name.
+     *
+     * @param database The name of the database to be created.
+     * @return true if the database creation is successful; false otherwise.
+     * @throws NullPointerException if the provided database name is null.
+     * @throws HarperDBException if there is an issue creating the database.
+     */
+    public boolean createDatabase(String database) {
+        Objects.requireNonNull(database, "database is required");
+        HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateDatabase(database))))
+                .build();
+
+        try {
+            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+            return HttpStatus.OK.isEquals(response);
+        } catch (IOException| InterruptedException e) {
+            throw new HarperDBException("There is an issue to create the database: " + database, e);
+        }
+
     }
 
     /**

@@ -19,7 +19,7 @@ class ServerTest {
     void shouldCreateSchema() {
         Server server = getServer();
 
-        boolean schema = server.schema("test");
+        boolean schema = server.createSchema("test");
         Assertions.assertTrue(schema);
     }
 
@@ -27,9 +27,9 @@ class ServerTest {
     void shouldNotCreateSchemaDuplicated() {
         Server server = getServer();
 
-        boolean schema = server.schema("duplicated");
+        boolean schema = server.createSchema("duplicated");
         Assertions.assertTrue(schema);
-        Assertions.assertFalse(server.schema("duplicated"));
+        Assertions.assertFalse(server.createSchema("duplicated"));
     }
 
     @Test
@@ -45,7 +45,7 @@ class ServerTest {
     void shouldCreateTable() {
         Server server = getServer();
 
-        server.schema("test");
+        server.createSchema("test");
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(server.createTable("test").table("table").id("id").execute()).isTrue();
             softly.assertThat(server.createTable("test").table("table").id("id").execute()).isFalse();
