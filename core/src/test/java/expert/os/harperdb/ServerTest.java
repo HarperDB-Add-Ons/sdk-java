@@ -1,10 +1,7 @@
 package expert.os.harperdb;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ServerTest {
 
@@ -38,9 +35,9 @@ class ServerTest {
     void shouldReturnNPEWhenSchemaIsNull() {
         Server server = getServer();
 
-        Assertions.assertThrows(NullPointerException.class, () -> server.table(null));
-        Assertions.assertThrows(NullPointerException.class, () -> server.table("schema").table(null));
-        Assertions.assertThrows(NullPointerException.class, () -> server.table("schema").table("table").id(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.createTable(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table("table").id(null));
     }
 
     private Server getServer() {

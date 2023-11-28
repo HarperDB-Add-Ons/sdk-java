@@ -57,12 +57,12 @@ public final class Server  {
      * @return A CreateTableBuilder instance to further configure the "create table" operation.
      * @throws NullPointerException if the provided schema is null.
      */
-    public CreateTableBuilder table(String schema){
+    public CreateTableBuilder createTable(String schema){
         Objects.requireNonNull(schema, "schema is required");
         return new CreateTableBuilder(schema, this);
     }
 
-    boolean createTable(CreateTable operation) {
+    boolean executeTableCreation(CreateTable operation) {
         HttpRequest request = createRequest()
                 .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
                 .build();

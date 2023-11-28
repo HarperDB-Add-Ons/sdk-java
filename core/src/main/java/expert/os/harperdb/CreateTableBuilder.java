@@ -66,7 +66,7 @@ public final class CreateTableBuilder {
          */
         public boolean id(String id) {
             Objects.requireNonNull(id, "id is required");
-            return this.server.createTable(new CreateTable(schema, table, id));
+            return this.server.executeTableCreation(new CreateTable(schema, table, id));
         }
     }
 }
