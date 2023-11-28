@@ -84,7 +84,7 @@ public final class CreateTableBuilder {
         }
 
         /**
-         * Executes the "create table" operation with default data attribute.
+         * Executes the "create table" operation with default "data" to the database.
          *
          * @return true if the table creation is successful; false otherwise.
          */

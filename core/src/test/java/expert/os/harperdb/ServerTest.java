@@ -47,8 +47,10 @@ class ServerTest {
 
         server.schema("test");
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(server.createTable("test").table("table").id("id")).isTrue();
-            softly.assertThat(server.createTable("test").table("table").id("id")).isFalse();
+            softly.assertThat(server.createTable("test").table("table").id("id").execute()).isTrue();
+            softly.assertThat(server.createTable("test").table("table").id("id").execute()).isFalse();
+            softly.assertThat(server.createTable("test").table("table").id("id").execute("databaseA")).isTrue();
+            softly.assertThat(server.createTable("test").table("table").id("id").execute("databaseA")).isFalse();
         });
     }
 
