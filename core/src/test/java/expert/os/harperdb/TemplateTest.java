@@ -36,6 +36,18 @@ class TemplateTest {
 
     @ParameterizedTest
     @MethodSource("animals")
+    void shouldUpsertAnimal(List<Animal> animals){
+        Assertions.assertThat(template.upsert(animals)).isTrue();
+    }
+
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldUpsertAnimal(Animal animal){
+        Assertions.assertThat(template.upsert(animal)).isTrue();
+    }
+
+    @ParameterizedTest
+    @MethodSource("animals")
     void shouldCreateAnimal(List<Animal> animals){
         Assertions.assertThat(template.insert(animals)).isTrue();
     }
