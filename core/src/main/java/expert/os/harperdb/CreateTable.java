@@ -10,9 +10,6 @@ import java.util.Objects;
 final class CreateTable extends Operation {
 
     @JsonProperty
-    private final String schema;
-
-    @JsonProperty
     private final String table;
 
     @JsonProperty("hash_attribute")
@@ -24,26 +21,15 @@ final class CreateTable extends Operation {
     /**
      * Constructs a new CreateTable operation with the specified schema, table, and ID.
      *
-     * @param schema The name of the schema for the new table.
      * @param table  The name of the table to be created.
      * @param database The name of the database to be created.
      * @param id     The hash attribute for the new table.
      */
-    CreateTable(String schema, String table, String id, String database) {
+    CreateTable( String table, String id, String database) {
         super(OperationType.CREATE_TABLE);
-        this.schema = schema;
         this.table = table;
         this.id = id;
         this.database = database;
-    }
-
-    /**
-     * Gets the name of the schema associated with this operation.
-     *
-     * @return The schema name.
-     */
-    public String schema() {
-        return schema;
     }
 
     /**
@@ -82,20 +68,20 @@ final class CreateTable extends Operation {
             return false;
         }
         CreateTable that = (CreateTable) object;
-        return Objects.equals(schema, that.schema) && Objects.equals(table, that.table)
-                && Objects.equals(id, that.id) && Objects.equals(database, that.database);
+        return Objects.equals(table, that.table)
+                && Objects.equals(id, that.id)
+                && Objects.equals(database, that.database);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(schema, table, id, database);
+        return Objects.hash(table, id, database);
     }
 
     @Override
     public String toString() {
         return "CreateTable{" +
-                "schema='" + schema + '\'' +
-                ", table='" + table + '\'' +
+                "table='" + table + '\'' +
                 ", id='" + id + '\'' +
                 ", database='" + database + '\'' +
                 '}';

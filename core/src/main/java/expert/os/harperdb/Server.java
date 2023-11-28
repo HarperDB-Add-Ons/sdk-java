@@ -73,15 +73,15 @@ public final class Server  {
     }
 
     /**
-     * Starts the process of building a "create table" operation for a specific schema.
+     * Starts the process of building a "create table" operation for a specific database.
      *
-     * @param schema The name of the schema for the new table.
+     * @param table The name of the new table.
      * @return A CreateTableBuilder instance to further configure the "create table" operation.
      * @throws NullPointerException if the provided schema is null.
      */
-    public CreateTableBuilder createTable(String schema){
-        Objects.requireNonNull(schema, "schema is required");
-        return new CreateTableBuilder(schema, this);
+    public CreateTableBuilder createTable(String table){
+        Objects.requireNonNull(table, "table is required");
+        return new CreateTableBuilder(table, this);
     }
 
     public Template template(String database){
