@@ -1,5 +1,6 @@
 package expert.os.harperdb;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,18 @@ class ServerTest {
         Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table(null));
         Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table("table").id(null));
     }
+
+    @Test
+    void shouldCreateTable() {
+        Server server = getServer();
+
+        server.schema("test");
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(server.createTable("test").table("table").id("id")).isTrue();
+            softly.assertThat(server.createTable("test").table("table").id("id")).isFalse();
+        });
+    }
+
 
     private Server getServer() {
         return ServerBuilder.of(container.host())
