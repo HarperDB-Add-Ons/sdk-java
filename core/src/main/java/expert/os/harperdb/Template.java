@@ -50,6 +50,24 @@ public final class Template {
         return server.execute(insert);
     }
 
+    public <T> boolean upsert(T entity) {
+        Objects.requireNonNull(entity, "entity is required");
+        var insert = new Upsert(database, table(entity), Collections.singletonList(entity));
+        return server.execute(insert);
+    }
+
+    public <T> boolean upsert(Iterable<T> entities) {
+        Objects.requireNonNull(entities, "entities is required");
+        List<T> beans = StreamSupport.stream(entities.spliterator(), false)
+                .toList();
+        if(beans.isEmpty()){
+            return false;
+        }
+        String name = table(beans.get(0));
+        var insert = new Upsert(database, name, beans);
+        return server.execute(insert);
+    }
+
     private <T> String table(T entity) {
         return entity.getClass().getSimpleName().toLowerCase(Locale.US);
     }
