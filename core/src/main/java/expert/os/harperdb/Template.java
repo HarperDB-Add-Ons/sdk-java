@@ -30,7 +30,7 @@ public final class Template {
            return false;
         }
         String name = table(beans.get(0));
-        var insert = new Insert(database, name, Collections.singletonList(beans));
+        var insert = new Insert(database, name, beans);
         return server.insert(insert);
     }
 
