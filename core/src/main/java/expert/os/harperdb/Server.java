@@ -84,6 +84,11 @@ public final class Server  {
         return new CreateTableBuilder(schema, this);
     }
 
+    public Template template(String database){
+        Objects.requireNonNull(database, "database is required");
+        return new Template(database, this);
+    }
+
     boolean executeTableCreation(CreateTable operation) {
         HttpRequest request = createRequest()
                 .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))

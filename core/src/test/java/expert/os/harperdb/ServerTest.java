@@ -71,6 +71,21 @@ class ServerTest {
         });
     }
 
+    @Test
+    void shouldReturnNPEWhenTemplateIsNull() {
+        Server server = getServer();
+
+        Assertions.assertThrows(NullPointerException.class, () -> server.template(null));
+    }
+
+    @Test
+    void shouldCreateTemplate() {
+        Server server = getServer();
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(server.template("test")).isNotNull();
+        });
+    }
 
     private Server getServer() {
         return ServerBuilder.of(container.host())
