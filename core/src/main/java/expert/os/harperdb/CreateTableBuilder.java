@@ -2,9 +2,6 @@ package expert.os.harperdb;
 
 import java.util.Objects;
 
-
-import java.util.Objects;
-
 /**
  * Builder class for constructing a "create table" operation in HarperDB.
  * This class facilitates the step-by-step configuration of a new table within a specific schema.
@@ -71,6 +68,7 @@ public final class CreateTableBuilder {
      * and executing the "create table" operation.
      */
     public static class TableBuilder {
+        private static final String DEFAULT_DATABASE_NAME = "data";
         private final String schema;
         private final String table;
         private final Server server;
@@ -89,7 +87,7 @@ public final class CreateTableBuilder {
          * @return true if the table creation is successful; false otherwise.
          */
         public boolean execute() {
-            return server.executeTableCreation(new CreateTable(schema, table, id, "data"));
+            return server.executeTableCreation(new CreateTable(schema, table, id, DEFAULT_DATABASE_NAME));
         }
 
         /**
