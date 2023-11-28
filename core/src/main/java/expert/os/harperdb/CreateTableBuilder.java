@@ -1,6 +1,10 @@
 package expert.os.harperdb;
 
+import java.net.http.HttpRequest;
 import java.util.Objects;
+
+import static expert.os.harperdb.JSONMapper.INSTANCE;
+import static java.net.http.HttpRequest.BodyPublishers.ofByteArray;
 
 public final class CreateTableBuilder {
 
@@ -31,6 +35,9 @@ public final class CreateTableBuilder {
         }
         public boolean id(String id) {
             Objects.requireNonNull(id, "id is required");
+            HttpRequest request = this.server.createRequest()
+                    .POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema(schema))))
+                    .build();
             return false;
         }
     }
