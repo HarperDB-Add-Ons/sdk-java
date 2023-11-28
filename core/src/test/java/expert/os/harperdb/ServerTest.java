@@ -34,6 +34,15 @@ class ServerTest {
         Assertions.assertFalse(server.schema("duplicated"));
     }
 
+    @Test
+    void shouldReturnNPEWhenSchemaIsNull() {
+        Server server = getServer();
+
+        Assertions.assertThrows(NullPointerException.class, () -> server.table(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.table("schema").table(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.table("schema").table("table").id(null));
+    }
+
     private Server getServer() {
         return ServerBuilder.of(container.host())
                 .withCredentials(container.user(), container.password());
