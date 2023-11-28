@@ -16,7 +16,6 @@ import static java.net.http.HttpRequest.BodyPublishers.ofByteArray;
  */
 public final class Server  {
 
-    private static final int HTTP_STATUS_OK = 200;
     private final URI host;
     private final Auth auth;
 
@@ -51,8 +50,13 @@ public final class Server  {
         }
     }
 
+    public CreateTableBuilder table(String schema){
+        Objects.requireNonNull(schema, "schema is required");
+        return new CreateTableBuilder(schema, this);
+    }
 
-    private HttpRequest.Builder createRequest() {
+
+    HttpRequest.Builder createRequest() {
         return HttpRequest.newBuilder()
                 .uri(host)
                 .headers("Content-Type", "application/json;charset=UTF-8")
