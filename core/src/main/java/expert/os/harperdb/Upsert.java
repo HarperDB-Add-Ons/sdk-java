@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-final class UpSert extends Operation{
+final class Upsert extends Operation{
 
     @JsonProperty
     private final String database;
@@ -13,7 +13,7 @@ final class UpSert extends Operation{
     @JsonProperty
     private final List<?> records;
 
-    UpSert(String database, String table, List<?> records) {
+    Upsert(String database, String table, List<?> records) {
         super(OperationType.UPSERT);
         this.database = database;
         this.table = table;
