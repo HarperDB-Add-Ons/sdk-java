@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServerTest {
 
-    private Container container = Container.INSTANCE;
+    private final Container container = Container.INSTANCE;
 
     @Test
     void shouldGetHost() {
