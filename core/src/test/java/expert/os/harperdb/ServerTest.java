@@ -42,6 +42,23 @@ class ServerTest {
     }
 
     @Test
+    void shouldReturnNPEWhenCreateDatabaseIsNull() {
+        Server server = getServer();
+
+        Assertions.assertThrows(NullPointerException.class, () -> server.createDatabase(null));
+    }
+
+    @Test
+    void shouldCreateDatabase() {
+        Server server = getServer();
+
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(server.createDatabase("database")).isTrue();
+            softly.assertThat(server.createDatabase("database")).isFalse();
+        });
+    }
+
+    @Test
     void shouldCreateTable() {
         Server server = getServer();
 
