@@ -29,9 +29,9 @@ class ServerTest {
     void shouldNotCreateSchemaDuplicated() {
         Server server = getServer();
 
-        boolean schema = server.schema("test");
+        boolean schema = server.schema("duplicated");
         Assertions.assertTrue(schema);
-        Assertions.assertFalse(server.schema("test"));
+        Assertions.assertFalse(server.schema("duplicated"));
     }
 
     private Server getServer() {

@@ -1,5 +1,6 @@
 package expert.os.harperdb;
 
+import java.net.http.HttpResponse;
 import java.util.function.Supplier;
 
 /**
@@ -31,5 +32,9 @@ enum HttpStatus implements Supplier<Integer> {
     @Override
     public Integer get() {
         return status;
+    }
+
+    public boolean isEquals(HttpResponse<?> response) {
+        return this.status == response.statusCode();
     }
 }

@@ -40,12 +40,12 @@ public final class Server  {
      */
     public boolean schema(String schema) {
         Objects.requireNonNull(schema, "schema is required");
-        HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema("test"))))
+        HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema(schema))))
                 .build();
 
         try {
             HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            return response.statusCode() == HTTP_STATUS_OK;
+            return HttpStatus.OK.isEquals(response);
         } catch (IOException| InterruptedException e) {
             throw new HarperDBException("There is an issue to create the schema: " + schema, e);
         }
