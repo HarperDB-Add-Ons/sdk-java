@@ -39,15 +39,7 @@ public final class Server  {
      */
     public boolean createSchema(String schema) {
         Objects.requireNonNull(schema, "schema is required");
-        HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateSchema(schema))))
-                .build();
-
-        try {
-            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            return HttpStatus.OK.isEquals(response);
-        } catch (IOException| InterruptedException e) {
-            throw new HarperDBException("There is an issue to create the schema: " + schema, e);
-        }
+        return execute(new CreateSchema(schema));
     }
 
     /**
@@ -60,16 +52,7 @@ public final class Server  {
      */
     public boolean createDatabase(String database) {
         Objects.requireNonNull(database, "database is required");
-        HttpRequest request = createRequest().POST(ofByteArray(INSTANCE.writeValueAsBytes(new CreateDatabase(database))))
-                .build();
-
-        try {
-            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            return HttpStatus.OK.isEquals(response);
-        } catch (IOException| InterruptedException e) {
-            throw new HarperDBException("There is an issue to create the database: " + database, e);
-        }
-
+        return execute(new CreateDatabase(database));
     }
 
     /**
@@ -90,6 +73,14 @@ public final class Server  {
     }
 
     boolean executeTableCreation(CreateTable operation) {
+        return execute(operation);
+    }
+
+    boolean insert(Insert insert) {
+      return execute(insert);
+    }
+
+    private boolean execute(Operation operation){
         HttpRequest request = createRequest()
                 .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
                 .build();
@@ -97,7 +88,7 @@ public final class Server  {
             HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             return HttpStatus.OK.isEquals(response);
         } catch (IOException| InterruptedException e) {
-            throw new HarperDBException("There is an issue to create the table: " + operation, e);
+            throw new HarperDBException("There is an issue to execute the operation: " + operation, e);
         }
     }
 
@@ -109,6 +100,7 @@ public final class Server  {
                 .header("Authorization", auth.header());
 
     }
+
 
 
 }

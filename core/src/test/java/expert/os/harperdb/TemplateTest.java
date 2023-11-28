@@ -14,4 +14,10 @@ class TemplateTest {
         server.createTable("animal").id("id").database("zoo");
         template = server.template("zoo");
     }
+
+    @Test
+    void shouldCreateAnimal(){
+       Animal animal = new Animal("1", "Lion");
+       template.insert(animal);
+    }
 }
