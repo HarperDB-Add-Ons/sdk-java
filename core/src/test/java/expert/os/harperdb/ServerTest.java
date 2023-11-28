@@ -37,8 +37,8 @@ class ServerTest {
         Server server = container.getServer();
 
         Assertions.assertThrows(NullPointerException.class, () -> server.createTable(null));
-        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table(null));
-        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").table("table").id(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").id(null));
+        Assertions.assertThrows(NullPointerException.class, () -> server.createTable("schema").id("table").database(null));
     }
 
     @Test
@@ -64,10 +64,10 @@ class ServerTest {
 
         server.createSchema("test");
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(server.createTable("test").table("table").id("id").execute()).isTrue();
-            softly.assertThat(server.createTable("test").table("table").id("id").execute()).isFalse();
-            softly.assertThat(server.createTable("test").table("table").id("id").execute("databaseA")).isTrue();
-            softly.assertThat(server.createTable("test").table("table").id("id").execute("databaseA")).isFalse();
+            softly.assertThat(server.createTable("table").id("id").execute()).isTrue();
+            softly.assertThat(server.createTable("table").id("id").execute()).isFalse();
+            softly.assertThat(server.createTable("table").id("id").database("databaseA")).isTrue();
+            softly.assertThat(server.createTable("table").id("id").database("databaseA")).isFalse();
         });
     }
 

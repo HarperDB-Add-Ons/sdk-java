@@ -67,7 +67,7 @@ public final class CreateTableBuilder {
          * @return true if the table creation is successful; false otherwise.
          * @throws NullPointerException if the provided database is null.
          */
-        public boolean execute(String database) {
+        public boolean database(String database) {
             Objects.requireNonNull(database, "database is required");
             return server.executeTableCreation(new CreateTable(table, id, database));
         }

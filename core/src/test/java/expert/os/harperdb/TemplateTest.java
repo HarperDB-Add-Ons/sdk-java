@@ -10,8 +10,8 @@ class TemplateTest {
     void setUp() {
         Container container = Container.INSTANCE;
         Server server = container.getServer();
-        server.createDatabase("zoos");
-        server.createTable()
-        template = new Template();
+        server.createDatabase("zoo");
+        server.createTable("animal").id("id").database("zoo");
+        template = server.template("zoo");
     }
 }
