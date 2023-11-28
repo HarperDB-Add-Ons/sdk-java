@@ -35,7 +35,7 @@ final class CreateTable extends Operation {
      *
      * @return The schema name.
      */
-    public String getSchema() {
+    public String schema() {
         return schema;
     }
 
@@ -44,7 +44,7 @@ final class CreateTable extends Operation {
      *
      * @return The table name.
      */
-    public String getTable() {
+    public String table() {
         return table;
     }
 
@@ -53,7 +53,7 @@ final class CreateTable extends Operation {
      *
      * @return The hash attribute.
      */
-    public String getId() {
+    public String id() {
         return id;
     }
 }
