@@ -75,14 +75,14 @@ public final class Template {
     public <K> boolean delete(String table, K id) {
         Objects.requireNonNull(table, "table is required");
         Objects.requireNonNull(id, "id is required");
-        var delete = new Delete<>(database, table, Collections.singleton(id), ALL_ATTRIBUTES);
+        var delete = new Delete<>(database, table, Collections.singleton(id));
         return server.execute(delete);
     }
 
     public <K, T> boolean delete(Class<T> type, K id) {
         Objects.requireNonNull(type, "type is required");
         Objects.requireNonNull(id, "id is required");
-        var delete = new Delete<>(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
+        var delete = new Delete<>(database, table(type), Collections.singleton(id));
         return server.execute(delete);
     }
 
@@ -91,7 +91,7 @@ public final class Template {
         Objects.requireNonNull(ids, "ids is required");
         var keys = StreamSupport.stream(ids.spliterator(), false)
                 .collect(Collectors.toSet());
-        var delete = new Delete<>(database, table(type), Collections.singleton(keys), ALL_ATTRIBUTES);
+        var delete = new Delete<>(database, table(type), Collections.singleton(keys));
         return server.execute(delete);
     }
 
