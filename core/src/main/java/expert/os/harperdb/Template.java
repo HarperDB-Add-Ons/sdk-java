@@ -82,6 +82,9 @@ public final class Template {
     public <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type) {
         Objects.requireNonNull(ids, "ids is required");
         Objects.requireNonNull(type, "type is required");
+        if (ids.spliterator().getExactSizeIfKnown() == 0) {
+            return Collections.emptyList();
+        }
         var keys = StreamSupport.stream(ids.spliterator(), false)
                 .collect(Collectors.toSet());
         var search = new SearchById<>(database, table(type), keys, ALL_ATTRIBUTES);

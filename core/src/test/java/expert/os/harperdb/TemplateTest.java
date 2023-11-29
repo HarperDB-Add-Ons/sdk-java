@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -80,7 +82,30 @@ class TemplateTest {
         template.insert(animals);
         var ids = animals.stream().map(Animal::id).toList();
         List<Animal> entities = template.findAllById(ids, Animal.class);
-        Assertions.assertThat(entities).hasSize(animals.size());
+        Assertions.assertThat(entities).hasSize(animals.size()).map(Animal::id).containsAll(ids);
+    }
+
+    @ParameterizedTest
+    @MethodSource("animals")
+    void shouldReturnEmptyWhenThereAreNoIds(List<Animal> animals){
+        var ids = animals.stream().map(Animal::id).toList();
+        var entities = template.findAllById(ids, Animal.class);
+        Assertions.assertThat(entities).isEmpty();
+        Assertions.assertThat(template.findAllById(Collections.emptyList(), Animal.class)).isEmpty();
+    }
+
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldFindWhatThereAtTheDatabase(Animal animal){
+        template.insert(animal);
+        var ids = List.of(FAKER.idNumber().valid(), FAKER.idNumber().valid(), animal.id());
+        var entities = template.findAllById(ids, Animal.class);
+        Assertions.assertThat(entities).hasSize(1);
+        Animal entity = entities.get(0);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(entity.id()).isEqualTo(animal.id());
+            softly.assertThat(entity.name()).isEqualTo(animal.name());
+        });
     }
 
     static Stream<Arguments> animal(){
