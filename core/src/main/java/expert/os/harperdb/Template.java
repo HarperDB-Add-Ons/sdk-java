@@ -17,135 +17,147 @@
 
 package expert.os.harperdb;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-public final class Template {
-    private static final Set<String> ALL_ATTRIBUTES = Collections.singleton("*");
-    private final String database;
-    private final Server server;
-    Template(String database, Server server) {
-        this.database = database;
-        this.server = server;
-    }
+/**
+ * A template interface for generic data manipulation operations.
+ */
+public interface Template {
 
-    public <T> boolean insert(T entity) {
-        Objects.requireNonNull(entity, "entity is required");
-        var insert = new Insert(database, table(entity), Collections.singletonList(entity));
-        return server.execute(insert);
-    }
+    /**
+     * Inserts a single entity into the data store.
+     *
+     * @param entity The entity to be inserted.
+     * @param <T>    The type of the entity.
+     * @return true if the insertion is successful; false otherwise.
+     * @throws NullPointerException if the provided entity is null.
+     */
+    <T> boolean insert(T entity);
 
-    public <T> boolean insert(Iterable<T> entities) {
-        Objects.requireNonNull(entities, "entities is required");
-        List<T> beans = StreamSupport.stream(entities.spliterator(), false)
-                .toList();
-        if(beans.isEmpty()){
-           return false;
-        }
-        String name = table(beans.get(0));
-        var insert = new Insert(database, name, beans);
-        return server.execute(insert);
-    }
+    /**
+     * Inserts multiple entities into the data store.
+     *
+     * @param entities The entities to be inserted.
+     * @param <T>      The type of the entities.
+     * @return true if the insertion is successful; false otherwise.
+     * @throws NullPointerException if the provided entities is null.
+     */
+    <T> boolean insert(Iterable<T> entities);
 
-    public <T> boolean update(T entity) {
-        Objects.requireNonNull(entity, "entity is required");
-        var insert = new Update(database, table(entity), Collections.singletonList(entity));
-        return server.execute(insert);
-    }
+    /**
+     * Updates a single entity in the data store.
+     *
+     * @param entity The entity to be updated.
+     * @param <T>    The type of the entity.
+     * @return true if the update is successful; false otherwise.
+     * @throws NullPointerException if the provided entity is null.
+     */
+    <T> boolean update(T entity);
 
-    public <T> boolean update(Iterable<T> entities) {
-        Objects.requireNonNull(entities, "entities is required");
-        List<T> beans = StreamSupport.stream(entities.spliterator(), false)
-                .toList();
-        if(beans.isEmpty()){
-            return false;
-        }
-        String name = table(beans.get(0));
-        var insert = new Update(database, name, beans);
-        return server.execute(insert);
-    }
+    /**
+     * Updates multiple entities in the data store.
+     *
+     * @param entities The entities to be updated.
+     * @param <T>      The type of the entities.
+     * @return true if the update is successful; false otherwise.
+     * @throws NullPointerException if the provided entities is null.
+     */
+    <T> boolean update(Iterable<T> entities);
 
-    public <T> boolean upsert(T entity) {
-        Objects.requireNonNull(entity, "entity is required");
-        var insert = new Upsert(database, table(entity), Collections.singletonList(entity));
-        return server.execute(insert);
-    }
+    /**
+     * Upserts (inserts or updates) a single entity into the data store.
+     *
+     * @param entity The entity to be upserted.
+     * @param <T>    The type of the entity.
+     * @return true if the upsert is successful; false otherwise.
+     * @throws NullPointerException if the provided entity is null.
+     */
+    <T> boolean upsert(T entity);
 
-    public <T> boolean upsert(Iterable<T> entities) {
-        Objects.requireNonNull(entities, "entities is required");
-        List<T> beans = StreamSupport.stream(entities.spliterator(), false)
-                .toList();
-        if(beans.isEmpty()){
-            return false;
-        }
-        String name = table(beans.get(0));
-        var insert = new Upsert(database, name, beans);
-        return server.execute(insert);
-    }
+    /**
+     * Upserts (inserts or updates) multiple entities into the data store.
+     *
+     * @param entities The entities to be upserted.
+     * @param <T>      The type of the entities.
+     * @return true if the upsert is successful; false otherwise.
+     * @throws NullPointerException if the provided entities is null.
+     */
+    <T> boolean upsert(Iterable<T> entities);
 
-    public <K> boolean delete(String table, K id) {
-        Objects.requireNonNull(table, "table is required");
-        Objects.requireNonNull(id, "id is required");
-        var delete = new Delete<>(database, table, Collections.singleton(id));
-        return server.execute(delete);
-    }
+    /**
+     * Deletes an entity by its identifier from the data store.
+     *
+     * @param table The table or entity type associated with the data.
+     *              If provided as a Class or instance, it takes the simple name of the class in lowercase.
+     * @param id    The identifier of the entity to be deleted.
+     * @param <K>   The type of the identifier.
+     * @return true if the deletion is successful; false otherwise.
+     * @throws NullPointerException if the provided table or id is null.
+     */
+    <K> boolean delete(String table, K id);
 
-    public <K, T> boolean delete(Class<T> type, K id) {
-        Objects.requireNonNull(type, "type is required");
-        Objects.requireNonNull(id, "id is required");
-        var delete = new Delete<>(database, table(type), Collections.singleton(id));
-        return server.execute(delete);
-    }
+    /**
+     * Deletes an entity by its identifier and type from the data store.
+     *
+     * @param type The class representing the entity type.
+     *             It takes the simple name of the class in lowercase.
+     * @param id   The identifier of the entity to be deleted.
+     * @param <K>  The type of the identifier.
+     * @param <T>  The type of the entity.
+     * @return true if the deletion is successful; false otherwise.
+     * @throws NullPointerException if the provided type or id is null.
+     */
+    <K, T> boolean delete(Class<T> type, K id);
 
-    public <K, T> boolean deleteAllById(Class<T> type, Iterable<K> ids) {
-        Objects.requireNonNull(type, "type is required");
-        Objects.requireNonNull(ids, "ids is required");
-        var keys = StreamSupport.stream(ids.spliterator(), false)
-                .collect(Collectors.toSet());
-        var delete = new Delete<>(database, table(type), keys);
-        return server.execute(delete);
-    }
+    /**
+     * Deletes multiple entities by their identifiers and type from the data store.
+     *
+     * @param type The class representing the entity type.
+     *             It takes the simple name of the class in lowercase.
+     * @param ids  The identifiers of the entities to be deleted.
+     * @param <K>  The type of the identifier.
+     * @param <T>  The type of the entity.
+     * @return true if the deletion is successful; false otherwise.
+     * @throws NullPointerException if the provided type or ids is null.
+     */
+    <K, T> boolean deleteAllById(Class<T> type, Iterable<K> ids);
 
-    public <K> boolean deleteAllById(String table, Iterable<K> ids) {
-        Objects.requireNonNull(table, "table is required");
-        Objects.requireNonNull(ids, "ids is required");
-        var keys = StreamSupport.stream(ids.spliterator(), false)
-                .collect(Collectors.toSet());
-        var delete = new Delete<>(database, table, keys);
-        return server.execute(delete);
-    }
+    /**
+     * Deletes multiple entities by their identifiers and table from the data store.
+     *
+     * @param table The table or entity type associated with the data.
+     *              If provided as a Class or instance, it takes the simple name of the class in lowercase.
+     * @param ids   The identifiers of the entities to be deleted.
+     * @param <K>   The type of the identifier.
+     * @return true if the deletion is successful; false otherwise.
+     * @throws NullPointerException if the provided table or ids is null.
+     */
+    <K> boolean deleteAllById(String table, Iterable<K> ids);
 
-    public <K, T> Optional<T> findById(K id, Class<T> type) {
-        Objects.requireNonNull(id, "id is required");
-        Objects.requireNonNull(type, "type is required");
-        var search = new SearchById<>(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
-        return server.singleResult(search, type);
-    }
+    /**
+     * Finds an entity by its identifier and type in the data store.
+     *
+     * @param id   The identifier of the entity to be retrieved.
+     * @param type The class representing the entity type.
+     *             It takes the simple name of the class in lowercase.
+     * @param <K>  The type of the identifier.
+     * @param <T>  The type of the entity.
+     * @return an Optional containing the entity if found, or an empty Optional otherwise.
+     * @throws NullPointerException if the provided id or type is null.
+     */
+    <K, T> Optional<T> findById(K id, Class<T> type);
 
-    public <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type) {
-        Objects.requireNonNull(ids, "ids is required");
-        Objects.requireNonNull(type, "type is required");
-        if (ids.spliterator().getExactSizeIfKnown() == 0) {
-            return Collections.emptyList();
-        }
-        var keys = StreamSupport.stream(ids.spliterator(), false)
-                .collect(Collectors.toSet());
-        var search = new SearchById<>(database, table(type), keys, ALL_ATTRIBUTES);
-        return server.result(search, type);
-    }
-
-    private <T> String table(T entity) {
-        return table(entity.getClass());
-    }
-
-    private <T> String table(Class<T> type) {
-        return type.getSimpleName().toLowerCase(Locale.US);
-    }
-
+    /**
+     * Finds multiple entities by their identifiers and type in the data store.
+     *
+     * @param ids  The identifiers of the entities to be retrieved.
+     * @param type The class representing the entity type.
+     *             It takes the simple name of the class in lowercase.
+     * @param <K>  The type of the identifier.
+     * @param <T>  The type of the entity.
+     * @return a List containing the retrieved entities.
+     * @throws NullPointerException if the provided ids or type is null.
+     */
+    <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type);
 }

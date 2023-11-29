@@ -88,7 +88,7 @@ public final class Server  {
 
     public Template template(String database){
         Objects.requireNonNull(database, "database is required");
-        return new Template(database, this);
+        return new DefaultTemplate(database, this);
     }
 
     boolean executeTableCreation(CreateTable operation) {
