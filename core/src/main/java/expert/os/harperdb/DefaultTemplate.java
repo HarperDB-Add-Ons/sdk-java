@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public final class DefaultTemplate implements Template {
+final class DefaultTemplate implements Template {
     private static final Set<String> ALL_ATTRIBUTES = Collections.singleton("*");
     private final String database;
     private final Server server;
