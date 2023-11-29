@@ -15,6 +15,7 @@
   ~
   ~ Otavio Santana
   -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -288,34 +289,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <version>0.15</version>
-                <configuration>
-                    <licenses>
-                        <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                            <licenseFamilyCategory>MIT</licenseFamilyCategory>
-                            <licenseFamilyName>MIT License</licenseFamilyName>
-                            <notes></notes>
-                            <patterns>
-                                <pattern>MIT License</pattern>
-                            </patterns>
-                        </license>
-                    </licenses>
-                    <includes>
-                        <include>src/**/*.java</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.vesion}</version>
@@ -330,28 +303,6 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <version>${apache.rat.version}</version>
-                <configuration>
-                    <includes>
-                        <include>src/**/*.java</include>
-                        <include>src/**/*.xml</include>
-                        <include>pom.xml</include>
-                    </includes>
-                    <excludes>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
