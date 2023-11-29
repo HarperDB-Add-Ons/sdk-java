@@ -4,9 +4,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 public final class Template {
+    private static final Set<String> ALL_ATTRIBUTES = Collections.singleton("*");
     private final String database;
     private final Server server;
     Template(String database, Server server) {
@@ -68,8 +71,19 @@ public final class Template {
         return server.execute(insert);
     }
 
+    public <T> Optional<T> findById(Object id, Class<T> type) {
+        Objects.requireNonNull(id, "id is required");
+        Objects.requireNonNull(type, "type is required");
+        var search = new SearchById(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
+        return server.singleResult(search, type);
+    }
+
     private <T> String table(T entity) {
-        return entity.getClass().getSimpleName().toLowerCase(Locale.US);
+        return table(entity.getClass());
+    }
+
+    private <T> String table(Class<T> type) {
+        return type.getSimpleName().toLowerCase(Locale.US);
     }
 
 }
