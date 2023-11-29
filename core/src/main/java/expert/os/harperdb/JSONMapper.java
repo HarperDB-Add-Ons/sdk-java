@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.IOException;
+import java.util.Optional;
+
 enum JSONMapper {
     INSTANCE;
 private final ObjectMapper mapper;
@@ -21,6 +24,16 @@ private final ObjectMapper mapper;
         } catch (JsonProcessingException exception) {
             throw new HarperDBException("There is an issue to write to json value", exception);
         }
+    }
 
+    <T> Optional<T> readValue(byte[] bytes, Class<T> valueType) {
+        try {
+            if(bytes == null || bytes.length == 0){
+                return Optional.empty();
+            }
+            return Optional.of(mapper.readValue(bytes, valueType));
+        } catch (IOException exception) {
+            throw new HarperDBException("There is an issue to read from json value", exception);
+        }
     }
 }
