@@ -26,7 +26,7 @@ private final ObjectMapper mapper;
         }
     }
 
-    <T> Optional<T> readValue(byte[] bytes, Class<T> valueType) {
+    <T> Optional<T> readSingleValue(byte[] bytes, Class<T> valueType) {
         try {
             if(bytes == null || bytes.length == 0){
                 return Optional.empty();
