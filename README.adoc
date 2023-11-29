@@ -1,2 +1,71 @@
-= harperdb-sdk-java
-Java implementations of HarperDB API functions. Also provides wrappers for an object-oriented interface.
+= HarpderDB SDK for Java
+:toc: auto
+
+== Overview
+
+The HarpderDB SDK for Java is an integration library that simplifies the interaction between Java applications and HarpderDB, focusing on NoSQL capabilities. It facilitates communication with HarpderDB through HTTP requests, providing an easy-to-use interface for database and table management.
+
+=== Motivation
+
+The motivation behind using the HarpderDB SDK for Java is to streamline the integration process between Java applications and HarpderDB. The SDK simplifies communication, allowing developers to focus on leveraging HarpderDB's NoSQL features without dealing with complex HTTP requests directly.
+
+=== Dependency
+
+To use the SDK in your project, add the following Maven dependency:
+
+[source,xml]
+----
+<dependency>
+   <groupId>expert.os.harpderdb</groupId>
+    <artifactId>harpderdb-parent</artifactId>
+    <version>0.0.1</version>
+</dependency>
+----
+
+== Server Class
+
+The `Server` class is a key component in the SDK, providing features for database and table management. Here's an example of how to use it:
+
+[source,java]
+----
+var server = ServerBuilder.of(host())
+        .withCredentials(user(), password());
+
+server.createDatabase("database");
+server.createTable("table").id("id").database("databaseA");
+----
+
+The `Server` class allows you to create databases, tables, and perform various operations on them.
+
+== Template Class
+
+The `Template` class operates as a Data Access Object (DAO) for Java POJOs. It utilizes Jackson for converting entities to JSON and communicates with the server via HTTP. Annotations can be used on the entities.
+
+Here's an example of how to create a `Template` instance:
+
+[source,java]
+----
+Server server = container.getServer();
+server.createDatabase("zoo");
+server.createTable("animal").id("id").database("zoo");
+----
+
+Given the `Animal` class:
+
+[source,java]
+----
+public record Animal(@JsonProperty String id, @JsonProperty String name) {
+
+}
+----
+
+You can operate with regular classes or records:
+
+[source,java]
+----
+Animal animal = new Animal("12", "Lion");
+template.insert(animal);
+Optional<Animal> optional = template.findById(animal.id(), Animal.class);
+----
+
+This example illustrates how the `Template` class simplifies CRUD operations on entities, supporting both regular classes and records.
