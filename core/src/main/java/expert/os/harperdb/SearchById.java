@@ -9,7 +9,7 @@ import java.util.Set;
  * Represents the "search by ID" operation in HarperDB.
  * This operation is used to retrieve records from a specific table in a given database based on their IDs.
  */
-final class SearchById extends Operation {
+final class SearchById<K> extends Operation {
 
 
     @JsonProperty
@@ -19,7 +19,7 @@ final class SearchById extends Operation {
     private final String table;
 
     @JsonProperty
-    private final Set<Object> ids;
+    private final Set<K> ids;
 
     @JsonProperty("get_attributes")
     private final Set<String> attributes;
@@ -32,7 +32,7 @@ final class SearchById extends Operation {
      * @param ids        The set of IDs used to identify and retrieve specific records.
      * @param attributes The set of attributes to retrieve for each record.
      */
-    SearchById(String database, String table, Set<Object> ids, Set<String> attributes) {
+    SearchById(String database, String table, Set<K> ids, Set<String> attributes) {
         super(OperationType.SEARCH_BY_ID);
         this.database = database;
         this.table = table;

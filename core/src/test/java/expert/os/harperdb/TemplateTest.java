@@ -67,6 +67,22 @@ class TemplateTest {
         });
     }
 
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldReturnEmptyOptionalWhenNotFound(Animal animal){
+        Optional<Animal> optional = template.findById(animal, Animal.class);
+        Assertions.assertThat(optional).isEmpty();
+    }
+
+    @ParameterizedTest
+    @MethodSource("animals")
+    void shouldFindAllById(List<Animal> animals){
+        template.insert(animals);
+        var ids = animals.stream().map(Animal::id).toList();
+        List<Animal> entities = template.findAllById(ids, Animal.class);
+        Assertions.assertThat(entities).hasSize(animals.size());
+    }
+
     static Stream<Arguments> animal(){
         return Stream.of(Arguments.of(new Animal(FAKER.idNumber().valid(), FAKER.animal().name())));
     }

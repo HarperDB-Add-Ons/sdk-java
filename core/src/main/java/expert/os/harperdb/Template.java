@@ -75,16 +75,16 @@ public final class Template {
     public <K, T> Optional<T> findById(K id, Class<T> type) {
         Objects.requireNonNull(id, "id is required");
         Objects.requireNonNull(type, "type is required");
-        var search = new SearchById(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
+        var search = new SearchById<>(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
         return server.singleResult(search, type);
     }
 
-    public <T> List<T> findById(Iterable<Object> ids, Class<T> type) {
+    public <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type) {
         Objects.requireNonNull(ids, "ids is required");
         Objects.requireNonNull(type, "type is required");
         var keys = StreamSupport.stream(ids.spliterator(), false)
                 .collect(Collectors.toSet());
-        var search = new SearchById(database, table(type), keys, ALL_ATTRIBUTES);
+        var search = new SearchById<>(database, table(type), keys, ALL_ATTRIBUTES);
         return server.result(search, type);
     }
 
