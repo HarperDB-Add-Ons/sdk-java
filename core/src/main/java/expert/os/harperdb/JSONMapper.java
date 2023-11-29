@@ -2,6 +2,7 @@ package expert.os.harperdb;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -45,7 +46,8 @@ private final ObjectMapper mapper;
             if(bytes == null || bytes.length == 0){
                 return Collections.emptyList();
             }
-            return mapper.readValue(bytes, new TypeReference<>() {});
+            JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, type);
+            return mapper.readValue(bytes, javaType);
         } catch (IOException exception) {
             throw new HarperDBException("There is an issue to read from json value", exception);
         }
