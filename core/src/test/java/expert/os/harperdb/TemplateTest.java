@@ -2,6 +2,7 @@ package expert.os.harperdb;
 
 import net.datafaker.Faker;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,6 +12,7 @@ import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 class TemplateTest {
@@ -52,6 +54,18 @@ class TemplateTest {
         Assertions.assertThat(template.insert(animals)).isTrue();
     }
 
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldFindById(Animal animal){
+        template.insert(animal);
+        Optional<Animal> optional = template.findById(animal.id(), Animal.class);
+        Assertions.assertThat(optional).isPresent();
+        Animal entity = optional.orElseThrow();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(entity.id()).isEqualTo(animal.id());
+            softly.assertThat(entity.name()).isEqualTo(animal.name());
+        });
+    }
 
     static Stream<Arguments> animal(){
         return Stream.of(Arguments.of(new Animal(FAKER.idNumber().valid(), FAKER.animal().name())));

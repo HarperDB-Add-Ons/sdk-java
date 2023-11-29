@@ -20,23 +20,11 @@ class JSONMapperTest {
     }
 
     @Test
-    void shouldReturnEmptyWhenByteIsNull() {
-        Optional<CreateSchema> schema = mapper.readSingleValue(null, CreateSchema.class);
-        assertFalse(schema.isPresent());
-    }
-
-    @Test
-    void shouldReturnEmptyWhenByteIsEmpty() {
-        Optional<CreateSchema> schema = mapper.readSingleValue(new byte[0], CreateSchema.class);
-        assertFalse(schema.isPresent());
-    }
-
-    @Test
     void shouldReturnEntityFromJSON() {
         String expected = "{\"id\":\"123\",\"name\":\"test\"}";
-        Optional<Animal> optional = mapper.readSingleValue(expected.getBytes(), Animal.class);
-        assertTrue(optional.isPresent());
-        Animal schema = optional.orElseThrow();
+        List<Animal> animals = mapper.readValue(expected.getBytes(), Animal.class);
+        Assertions.assertThat(animals).isNotNull().isNotEmpty().hasSize(1);
+        Animal schema = animals.get(0);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(schema.id()).isEqualTo("123");
             softly.assertThat(schema.name()).isEqualTo("test");

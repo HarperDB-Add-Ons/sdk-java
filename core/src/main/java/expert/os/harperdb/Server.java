@@ -91,19 +91,13 @@ public final class Server  {
     }
 
     <T> Optional<T> singleResult(Operation operation, Class<T> type){
-        HttpRequest request = createRequest()
-                .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
-                .build();
-        try {
-            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-            if(HttpStatus.OK.isEquals(response)){
-                byte[] body = response.body();
-                return INSTANCE.readSingleValue(body, type);
-            } else {
-                return Optional.empty();
-            }
-        } catch (IOException| InterruptedException e) {
-            throw new HarperDBException("There is an issue to execute the operation: " + operation + "message: ", e);
+        List<T> entities = result(operation, type);
+        if (entities.isEmpty()) {
+            return Optional.empty();
+        } else if (entities.size() == 1) {
+            return Optional.of(entities.get(0));
+        } else {
+            throw new HarperDBException("There is more than one result in a single result: " + operation);
         }
     }
 

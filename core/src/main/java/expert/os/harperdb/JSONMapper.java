@@ -30,17 +30,6 @@ private final ObjectMapper mapper;
         }
     }
 
-    <T> Optional<T> readSingleValue(byte[] bytes, Class<T> type) {
-        try {
-            if(bytes == null || bytes.length == 0){
-                return Optional.empty();
-            }
-            return Optional.of(mapper.readValue(bytes, type));
-        } catch (IOException exception) {
-            throw new HarperDBException("There is an issue to read from json value", exception);
-        }
-    }
-
     <T> List<T> readValue(byte[] bytes, Class<T> type) {
         try {
             if(bytes == null || bytes.length == 0){
