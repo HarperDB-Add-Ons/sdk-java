@@ -108,6 +108,32 @@ class TemplateTest {
         });
     }
 
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldUpdateAnimal(Animal animal){
+        template.insert(animal);
+        var animalUpdated = new Animal(animal.id(), FAKER.animal().name());
+        Assertions.assertThat(template.update(animalUpdated)).isTrue();
+        Optional<Animal> optional = template.findById(animal.id(), Animal.class);
+        Assertions.assertThat(optional).isPresent();
+        Animal entity = optional.orElseThrow();
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(entity.id()).isEqualTo(animal.id());
+            softly.assertThat(entity.name()).isEqualTo(animalUpdated.name());
+        });
+    }
+
+    @ParameterizedTest
+    @MethodSource("animals")
+    void shouldUpdateAnimals(List<Animal> animals){
+        template.insert(animals);
+        var animalsUpdated = animals.stream().map(animal -> new Animal(animal.id(), FAKER.animal().name())).toList();
+        Assertions.assertThat(template.update(animalsUpdated)).isTrue();
+        var entities = template.findAllById(animals.stream().map(Animal::id).toList(), Animal.class);
+        Assertions.assertThat(entities).hasSize(animals.size())
+                .map(Animal::id).containsAll(animalsUpdated.stream().map(Animal::id).toList());
+    }
+
     static Stream<Arguments> animal(){
         return Stream.of(Arguments.of(new Animal(FAKER.idNumber().valid(), FAKER.animal().name())));
     }
