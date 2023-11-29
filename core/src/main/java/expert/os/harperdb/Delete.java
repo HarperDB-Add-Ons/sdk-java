@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import java.util.Set;
 
+
 /**
- * Represents the "search by ID" operation in HarperDB.
- * This operation is used to retrieve records from a specific table in a given database based on their IDs.
+ * Represents the "delete" operation in HarperDB.
+ * This operation is used to delete records from a specific table in a given database based on their IDs.
  *
- *  @param <K> The type of the IDs used for record identification.
+ * @param <K> The type of the IDs used for record identification.
  */
-final class SearchById<K> extends Operation {
+final class Delete<K> extends Operation {
 
 
     @JsonProperty
@@ -26,16 +27,17 @@ final class SearchById<K> extends Operation {
     @JsonProperty("get_attributes")
     private final Set<String> attributes;
 
+
     /**
-     * Constructs a new SearchById operation with the specified database, table, IDs, and attributes.
+     * Constructs a new Delete operation with the specified database, table, IDs, and attributes.
      *
-     * @param database   The name of the database where records will be searched.
-     * @param table      The name of the table where records will be searched.
-     * @param ids        The set of IDs used to identify and retrieve specific records.
-     * @param attributes The set of attributes to retrieve for each record.
+     * @param database   The name of the database where records will be deleted.
+     * @param table      The name of the table where records will be deleted.
+     * @param ids        The set of IDs used to identify and delete specific records.
+     * @param attributes The set of attributes to delete for each record.
      */
-    SearchById(String database, String table, Set<K> ids, Set<String> attributes) {
-        super(OperationType.SEARCH_BY_ID);
+    Delete(String database, String table, Set<K> ids, Set<String> attributes) {
+        super(OperationType.DELETE);
         this.database = database;
         this.table = table;
         this.ids = ids;
@@ -51,7 +53,7 @@ final class SearchById<K> extends Operation {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        SearchById that = (SearchById) object;
+        Delete that = (Delete) object;
         return Objects.equals(database, that.database) && Objects.equals(table, that.table)
                 && Objects.equals(ids, that.ids) && Objects.equals(attributes, that.attributes);
     }
@@ -63,7 +65,7 @@ final class SearchById<K> extends Operation {
 
     @Override
     public String toString() {
-        return "SearchById{" +
+        return "Delete{" +
                 "database='" + database + '\'' +
                 ", table='" + table + '\'' +
                 ", ids=" + ids +
