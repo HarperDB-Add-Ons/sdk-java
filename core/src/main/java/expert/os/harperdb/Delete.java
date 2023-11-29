@@ -24,8 +24,6 @@ final class Delete<K> extends Operation {
     @JsonProperty
     private final Set<K> ids;
 
-    @JsonProperty("get_attributes")
-    private final Set<String> attributes;
 
 
     /**
@@ -34,14 +32,12 @@ final class Delete<K> extends Operation {
      * @param database   The name of the database where records will be deleted.
      * @param table      The name of the table where records will be deleted.
      * @param ids        The set of IDs used to identify and delete specific records.
-     * @param attributes The set of attributes to delete for each record.
      */
-    Delete(String database, String table, Set<K> ids, Set<String> attributes) {
+    Delete(String database, String table, Set<K> ids) {
         super(OperationType.DELETE);
         this.database = database;
         this.table = table;
         this.ids = ids;
-        this.attributes = attributes;
     }
 
 
@@ -53,14 +49,13 @@ final class Delete<K> extends Operation {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        Delete that = (Delete) object;
-        return Objects.equals(database, that.database) && Objects.equals(table, that.table)
-                && Objects.equals(ids, that.ids) && Objects.equals(attributes, that.attributes);
+        Delete<?> delete = (Delete<?>) object;
+        return Objects.equals(database, delete.database) && Objects.equals(table, delete.table) && Objects.equals(ids, delete.ids);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(database, table, ids, attributes);
+        return Objects.hash(database, table, ids);
     }
 
     @Override
@@ -69,7 +64,6 @@ final class Delete<K> extends Operation {
                 "database='" + database + '\'' +
                 ", table='" + table + '\'' +
                 ", ids=" + ids +
-                ", attributes=" + attributes +
                 '}';
     }
 }
