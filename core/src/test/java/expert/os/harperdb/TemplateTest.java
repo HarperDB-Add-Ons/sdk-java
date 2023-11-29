@@ -134,6 +134,26 @@ class TemplateTest {
                 .map(Animal::id).containsAll(animalsUpdated.stream().map(Animal::id).toList());
     }
 
+    @ParameterizedTest
+    @MethodSource("animal")
+    void shouldDeleteAnimal(Animal animal){
+        this.template.upsert(animal);
+        Assertions.assertThat(this.template.findById(animal.id(), Animal.class)).isNotEmpty();
+        this.template.delete(Animal.class, animal.id());
+        Assertions.assertThat(this.template.findById(animal.id(), Animal.class)).isEmpty();
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("animals")
+    void shouldDeleteAllAnimals(List<Animal> animals){
+        this.template.upsert(animals);
+        var ids = animals.stream().map(Animal::id).toList();
+        Assertions.assertThat(this.template.findAllById(ids, Animal.class)).isNotEmpty().hasSize(ids.size());
+        this.template.deleteAllById(Animal.class, ids);
+        Assertions.assertThat(this.template.findAllById(ids, Animal.class)).isEmpty();
+    }
+
     static Stream<Arguments> animal(){
         return Stream.of(Arguments.of(new Animal(FAKER.idNumber().valid(), FAKER.animal().name())));
     }
