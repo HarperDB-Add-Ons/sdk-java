@@ -72,6 +72,38 @@ public final class Template {
         return server.execute(insert);
     }
 
+    public <K> boolean delete(String table, K id) {
+        Objects.requireNonNull(table, "table is required");
+        Objects.requireNonNull(id, "id is required");
+        var delete = new Delete<>(database, table, Collections.singleton(id), ALL_ATTRIBUTES);
+        return server.execute(delete);
+    }
+
+    public <K, T> boolean delete(Class<T> type, K id) {
+        Objects.requireNonNull(type, "type is required");
+        Objects.requireNonNull(id, "id is required");
+        var delete = new Delete<>(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
+        return server.execute(delete);
+    }
+
+    public <K, T> boolean deleteAllById(Class<T> type, Iterable<K> ids) {
+        Objects.requireNonNull(type, "type is required");
+        Objects.requireNonNull(ids, "ids is required");
+        var keys = StreamSupport.stream(ids.spliterator(), false)
+                .collect(Collectors.toSet());
+        var delete = new Delete<>(database, table(type), Collections.singleton(keys), ALL_ATTRIBUTES);
+        return server.execute(delete);
+    }
+
+    public <K> boolean deleteAllById(String table, Iterable<K> ids) {
+        Objects.requireNonNull(table, "table is required");
+        Objects.requireNonNull(ids, "ids is required");
+        var keys = StreamSupport.stream(ids.spliterator(), false)
+                .collect(Collectors.toSet());
+        var delete = new Delete<>(database, table, keys, ALL_ATTRIBUTES);
+        return server.execute(delete);
+    }
+
     public <K, T> Optional<T> findById(K id, Class<T> type) {
         Objects.requireNonNull(id, "id is required");
         Objects.requireNonNull(type, "type is required");
