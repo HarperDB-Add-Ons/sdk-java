@@ -5,6 +5,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -99,6 +101,23 @@ public final class Server  {
                 return INSTANCE.readSingleValue(body, type);
             } else {
                 return Optional.empty();
+            }
+        } catch (IOException| InterruptedException e) {
+            throw new HarperDBException("There is an issue to execute the operation: " + operation + "message: ", e);
+        }
+    }
+
+    <T> List<T> result(Operation operation, Class<T> type){
+        HttpRequest request = createRequest()
+                .POST(ofByteArray(INSTANCE.writeValueAsBytes(operation)))
+                .build();
+        try {
+            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            if(HttpStatus.OK.isEquals(response)){
+                byte[] body = response.body();
+                return INSTANCE.readValue(body, type);
+            } else {
+                return Collections.emptyList();
             }
         } catch (IOException| InterruptedException e) {
             throw new HarperDBException("There is an issue to execute the operation: " + operation + "message: ", e);
