@@ -125,7 +125,7 @@ final class DefaultTemplate implements Template {
     }
 
     @Override
-    public <K, T> Optional<T> findById(K id, Class<T> type) {
+    public <K, T> Optional<T> findById(Class<T> type, K id) {
         Objects.requireNonNull(id, "id is required");
         Objects.requireNonNull(type, "type is required");
         var search = new SearchById<>(database, table(type), Collections.singleton(id), ALL_ATTRIBUTES);
@@ -133,7 +133,7 @@ final class DefaultTemplate implements Template {
     }
 
     @Override
-    public <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type) {
+    public <K, T> List<T> findAllById(Class<T> type, Iterable<K> ids) {
         Objects.requireNonNull(ids, "ids is required");
         Objects.requireNonNull(type, "type is required");
         if (ids.spliterator().getExactSizeIfKnown() == 0) {

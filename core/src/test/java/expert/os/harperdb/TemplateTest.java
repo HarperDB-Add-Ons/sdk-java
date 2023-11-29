@@ -77,7 +77,7 @@ class TemplateTest {
     @MethodSource("animal")
     void shouldFindById(Animal animal){
         template.insert(animal);
-        Optional<Animal> optional = template.findById(animal.id(), Animal.class);
+        Optional<Animal> optional = template.findById(Animal.class, animal.id());
         Assertions.assertThat(optional).isPresent();
         Animal entity = optional.orElseThrow();
         SoftAssertions.assertSoftly(softly -> {
@@ -89,7 +89,7 @@ class TemplateTest {
     @ParameterizedTest
     @MethodSource("animal")
     void shouldReturnEmptyOptionalWhenNotFound(Animal animal){
-        Optional<Animal> optional = template.findById(animal, Animal.class);
+        Optional<Animal> optional = template.findById(Animal.class, animal);
         Assertions.assertThat(optional).isEmpty();
     }
 
@@ -98,7 +98,7 @@ class TemplateTest {
     void shouldFindAllById(List<Animal> animals){
         template.insert(animals);
         var ids = animals.stream().map(Animal::id).toList();
-        List<Animal> entities = template.findAllById(ids, Animal.class);
+        List<Animal> entities = template.findAllById(Animal.class, ids);
         Assertions.assertThat(entities).hasSize(animals.size()).map(Animal::id).containsAll(ids);
     }
 
@@ -106,9 +106,9 @@ class TemplateTest {
     @MethodSource("animals")
     void shouldReturnEmptyWhenThereAreNoIds(List<Animal> animals){
         var ids = animals.stream().map(Animal::id).toList();
-        var entities = template.findAllById(ids, Animal.class);
+        var entities = template.findAllById(Animal.class, ids);
         Assertions.assertThat(entities).isEmpty();
-        Assertions.assertThat(template.findAllById(Collections.emptyList(), Animal.class)).isEmpty();
+        Assertions.assertThat(template.findAllById(Animal.class, Collections.emptyList())).isEmpty();
     }
 
     @ParameterizedTest
@@ -116,7 +116,7 @@ class TemplateTest {
     void shouldFindWhatThereAtTheDatabase(Animal animal){
         template.insert(animal);
         var ids = List.of(FAKER.idNumber().valid(), FAKER.idNumber().valid(), animal.id());
-        var entities = template.findAllById(ids, Animal.class);
+        var entities = template.findAllById(Animal.class, ids);
         Assertions.assertThat(entities).hasSize(1);
         Animal entity = entities.get(0);
         SoftAssertions.assertSoftly(softly -> {
@@ -131,7 +131,7 @@ class TemplateTest {
         template.insert(animal);
         var animalUpdated = new Animal(animal.id(), FAKER.animal().name());
         Assertions.assertThat(template.update(animalUpdated)).isTrue();
-        Optional<Animal> optional = template.findById(animal.id(), Animal.class);
+        Optional<Animal> optional = template.findById(Animal.class, animal.id());
         Assertions.assertThat(optional).isPresent();
         Animal entity = optional.orElseThrow();
         SoftAssertions.assertSoftly(softly -> {
@@ -146,7 +146,7 @@ class TemplateTest {
         template.insert(animals);
         var animalsUpdated = animals.stream().map(animal -> new Animal(animal.id(), FAKER.animal().name())).toList();
         Assertions.assertThat(template.update(animalsUpdated)).isTrue();
-        var entities = template.findAllById(animals.stream().map(Animal::id).toList(), Animal.class);
+        var entities = template.findAllById(Animal.class, animals.stream().map(Animal::id).toList());
         Assertions.assertThat(entities).hasSize(animals.size())
                 .map(Animal::id).containsAll(animalsUpdated.stream().map(Animal::id).toList());
     }
@@ -155,9 +155,9 @@ class TemplateTest {
     @MethodSource("animal")
     void shouldDeleteAnimal(Animal animal){
         this.template.upsert(animal);
-        Assertions.assertThat(this.template.findById(animal.id(), Animal.class)).isNotEmpty();
+        Assertions.assertThat(this.template.findById(Animal.class, animal.id())).isNotEmpty();
         this.template.delete(Animal.class, animal.id());
-        Assertions.assertThat(this.template.findById(animal.id(), Animal.class)).isEmpty();
+        Assertions.assertThat(this.template.findById(Animal.class, animal.id())).isEmpty();
 
     }
 
@@ -166,9 +166,9 @@ class TemplateTest {
     void shouldDeleteAllAnimals(List<Animal> animals){
         this.template.upsert(animals);
         var ids = animals.stream().map(Animal::id).toList();
-        Assertions.assertThat(this.template.findAllById(ids, Animal.class)).isNotEmpty().hasSize(ids.size());
+        Assertions.assertThat(this.template.findAllById(Animal.class, ids)).isNotEmpty().hasSize(ids.size());
         this.template.deleteAllById(Animal.class, ids);
-        Assertions.assertThat(this.template.findAllById(ids, Animal.class)).isEmpty();
+        Assertions.assertThat(this.template.findAllById(Animal.class, ids)).isEmpty();
     }
 
     static Stream<Arguments> animal(){

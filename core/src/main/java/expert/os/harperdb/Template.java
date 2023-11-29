@@ -146,7 +146,7 @@ public interface Template {
      * @return an Optional containing the entity if found, or an empty Optional otherwise.
      * @throws NullPointerException if the provided id or type is null.
      */
-    <K, T> Optional<T> findById(K id, Class<T> type);
+    <K, T> Optional<T> findById(Class<T> type, K id);
 
     /**
      * Finds multiple entities by their identifiers and type in the data store.
@@ -159,5 +159,5 @@ public interface Template {
      * @return a List containing the retrieved entities.
      * @throws NullPointerException if the provided ids or type is null.
      */
-    <K, T> List<T> findAllById(Iterable<K> ids, Class<T> type);
+    <K, T> List<T> findAllById(Class<T> type, Iterable<K> ids);
 }
