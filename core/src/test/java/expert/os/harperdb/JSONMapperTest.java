@@ -21,13 +21,13 @@ class JSONMapperTest {
 
     @Test
     void shouldReturnEntityFromJSON() {
-        String expected = "{\"id\":\"123\",\"name\":\"test\"}";
+        String expected = "[{\"id\":\"123\",\"name\":\"test\"}]";
         List<Animal> animals = mapper.readValue(expected.getBytes(), Animal.class);
         Assertions.assertThat(animals).isNotNull().isNotEmpty().hasSize(1);
-        Animal schema = animals.get(0);
+        Animal animal = animals.get(0);
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(schema.id()).isEqualTo("123");
-            softly.assertThat(schema.name()).isEqualTo("test");
+            softly.assertThat(animal.id()).isEqualTo("123");
+            softly.assertThat(animal.name()).isEqualTo("test");
         });
     }
 
